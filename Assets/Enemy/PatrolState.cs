@@ -6,11 +6,13 @@ public class PatrolState : BaseState
 {
     bool isMoving = false;
     Vector3 destination;
+    string triggerName = "Patrol";
 
     public void EnterState(Enemy enemy)
     {
         Debug.Log("Enter Patrol");
         isMoving = false;
+        enemy.animator?.SetTrigger(triggerName);
     }
 
     public void UpdateState(Enemy enemy)
@@ -31,7 +33,8 @@ public class PatrolState : BaseState
         }
         else
         {
-            if (Vector3.Distance(enemy.transform.position, destination) <= 0.1f)
+            // Nilai minimal distance dinaikkan karena terkadang enemy stuck
+            if (Vector3.Distance(enemy.transform.position, destination) < 1f)
             {
                 isMoving = false;
             }

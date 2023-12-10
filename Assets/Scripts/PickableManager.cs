@@ -21,6 +21,8 @@ public class PickableManager : MonoBehaviour
             {
                 pickableCoins++;
             }
+
+            UIManager.instance?.SetMaxCoin(pickableCoins);
             
         }
     }
@@ -38,6 +40,7 @@ public class PickableManager : MonoBehaviour
         if (pickable.pickType == Pickables.PickType.Coin)
         {
             pickableCoins--;
+            UIManager.instance?.AddCoin(1);
         }
 
         if (pickableCoins <= 0)

@@ -15,6 +15,11 @@ public class Enemy : MonoBehaviour
     {
         get
         {
+            if (player == null || player.IsRespawn)
+            {
+                return false;
+            }
+
             return Vector3.Distance(transform.position, player.transform.position) < ChaseDistance;
         }
     }
@@ -30,9 +35,13 @@ public class Enemy : MonoBehaviour
     [HideInInspector]
     public RetreatState RetreatState = new RetreatState();
 
+    [HideInInspector]
+    public Animator animator;
+
     private void Awake()
     {
         Agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
 
         _currentState = PatrolState;
         _currentState.EnterState(this);
@@ -44,6 +53,15 @@ public class Enemy : MonoBehaviour
         {
             player.OnPowerUpStart += StartRetreat;
             player.OnPowerUpStop += StopRetreat;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (player != null)
+        {
+            player.OnPowerUpStart -= StartRetreat;
+            player.OnPowerUpStop -= StopRetreat;
         }
     }
 
@@ -70,5 +88,21 @@ public class Enemy : MonoBehaviour
     void StopRetreat()
     {
         SwitchState(PatrolState);
+    }
+
+    public void EnemyDead()
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_currentState != ChaseState) return;
+
+        if (collision.collider.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<Player>().TakeDamage();
+            SwitchState(PatrolState);
+        }
     }
 }
