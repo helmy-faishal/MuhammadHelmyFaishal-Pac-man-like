@@ -105,4 +105,10 @@ public class Enemy : MonoBehaviour
             SwitchState(PatrolState);
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, ChaseDistance);
+    }
 }

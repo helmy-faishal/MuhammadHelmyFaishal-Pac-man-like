@@ -30,7 +30,7 @@ public class PickableManager : MonoBehaviour
     void OnPickablePicked(Pickables pickable)
     {
         pickables.Remove(pickable);
-        Debug.Log($"Player picked {pickable.pickType}");
+        //Debug.Log($"Player picked {pickable.pickType}");
 
         if (pickable.pickType == Pickables.PickType.Power)
         {
@@ -45,6 +45,7 @@ public class PickableManager : MonoBehaviour
 
         if (pickableCoins <= 0)
         {
+            SceneSwitching.instance?.LoadWinScene();
             Debug.Log("You Win !!!");
         }
 

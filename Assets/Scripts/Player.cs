@@ -113,6 +113,7 @@ public class Player : MonoBehaviour
     void PlayerDead()
     {
         Destroy(gameObject);
+        SceneSwitching.instance?.LoadLoseScene();
         Debug.Log("You Lose!");
     }
 
